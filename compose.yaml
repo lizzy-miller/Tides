@@ -1,0 +1,68 @@
+services:
+
+  jupyterlab:
+
+    image: tides
+
+    env_file:
+
+      - .env
+
+    ports:
+
+      - "8888:8888"
+      - "8050:8050"
+
+    volumes:
+
+      - ./:/tides
+
+      - ./settings.txt:/root/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
+
+    networks:
+
+      - tidesnetwork
+
+
+  postgres:
+
+    image: postgres:latest
+
+    env_file:
+
+      - .env
+
+    ports:
+
+      - "5432:5432"
+
+    volumes:
+
+      - postgresdata:/var/lib/postgresql/data
+
+    networks:
+
+      - tidesnetwork
+  
+  mongo: 
+    image: mongo:latest
+    env_file:
+      - .env
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+    networks: 
+      - tidesnetwork
+
+ 
+
+volumes:
+  postgresdata:
+  mongodata:
+
+ 
+
+networks:
+
+  tidesnetwork:
