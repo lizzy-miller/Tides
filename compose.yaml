@@ -15,9 +15,7 @@ services:
 
     volumes:
 
-      - ./:/tides
-
-      - ./settings.txt:/root/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
+      - ./:/Tides
 
     networks:
 
