@@ -1,0 +1,97 @@
+Project Tides {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # Coastline Conservation in the US.  
+    This database was created to provide relational data for the class project title 'Ocean Coastline Conservation Efforts along the Coastline U.S. between 1920 – 2022.', by Elizabeth Miller. Many of the parameters in each database have the same meaning; hence, there respective definitions will not be repeated. 
+  '''
+}
+
+Table states_id as s{
+  state varchar [pk]
+  name varchar
+  state_id int [pk]
+  geometry geometry
+      note: "Data on states' geographical locations. There are two primary keys. One is 'state', which are the unique abbreviations that stand for the long form of US states. The other primary key is state_id, which is the unique identifier associated with that state. The parameter 'name' is the long form of the state. The parameter 'geometry' is the spatial information of the object."
+}
+
+Table counties_us as c{
+  geo_id varchar [pk]
+  countyname varchar 
+  lsad varchar
+  censusarea float
+  name varchar
+  state varchar [pk]
+  state_id int [pk]
+  geometry varchar
+        note: "Data on US counties' geographical locations. There are three primary keys. One is 'state', which are the unique abbreviations that stand for the long form of US states. The second primary key is state_id, which is the unique identifier associated with that state. The third is 'geo_id' which represents numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data. 'countyname' is the name of the respective county. 'lsad' is the legal/statistical area. name is the long form name of the respective state. The parameter 'geometry' is the spatial information of the object."
+}
+
+Table beaches_id as b{
+  geo_id varchar [pk]
+  countyname varchar 
+  lsad varchar
+  censusarea float
+  name varchar
+  state varchar 
+  beachloc varchar
+  latitude float
+  longitude float 
+  year int
+  length_ft float
+  volume_cy float
+  ssname varchar
+  ssloc varchar
+  sstype varchar
+  geometry geometry
+        note: "Data on US beach location' geographical locations and beach renourishment volume. There is one primary key. The primary key is geo_id, which represents numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data. 'beachloc' is the name of the beach location/beach project of the respective renourishment project. latitude/longitude contains spatial information about the project. 'length_ft' is the known length of the respective beach renourishment project. 'Volume_cy' is the known total volume of beach renourishment project. 'ssname' is the sand source name of the beach renourishment project. 'ssloc' is the sand source location of beach renourishment. 'sstype' is the sand source type of beach renourishment."
+}
+
+Table sites_id as sid{
+  geo_id varchar [pk]
+  slatitude float
+  slongitude float
+  beachloc varchar
+  city varchar
+  state varchar 
+  feature varchar
+  toeheight float
+  creatheigh float
+  beachslope float
+  countyname varchar 
+  lsad varchar
+  censusarea float
+  name varchar
+  geometry geometry
+        note: "Data on US dunes and cliffs location' geographical locations. The indicator of whether the data is a dune or cliff is stored in the 'feature' paramenter. There is one primary key. The primary key is geo_id, which represents numeric codes that uniquely identify all administrative/legal and statistical geographic areas for which the Census Bureau tabulates data. 'slatitude' and 'slongitude' is the respective latitude and longitude for the site. 'beachloc' is the beach location of the dune/cliff. 'toeheight' is the mean sea level referenced elevation, in meters, of the toe of the coastal feature (dune, cliff, etc.) identified at the site. 'crestheight' is the mean sea level referenced elevation, in meters, of the crest of the coastal feature (dune, cliff, etc.) identified at the site. 'beachslope' is the beach slope at the forecast location. "
+}
+
+Table states_volume as sv{
+  state varchar [pk]
+  year int
+  length_ft float
+  volume_cy float
+        note: "Data on US states' beach renourishment volume. There is one primary key, which is 'state', which represents the unique abbreviations that stand for the long form of US states."
+}
+
+Table reefs as r{
+  reefidentifier varchar
+  reefname varchar
+  reefcomposition varchar
+  reefstructure varchar
+  reefyear int
+  stateabbreviation varchar [pk]
+  depthfrombathymetry varchar
+  waterdepthfeet float
+  latitudedms varchar
+  longitudedms archer
+  geometry geometry
+  hover_name varchar
+        note: "Data on artificial marine reefs in the US and territories. There is one primary key, which is 'stateabbreviation', which represents the unique abbreviations that stand for the long form of US states. 'reefidentifier' is the unique identifier for each artificial reef. reefname is the name of the artificial reef. 'reefcomposition' is the material used to construct the reef. 'reefyear' is the year when the reef was established or constructed. 'depthfrombathymetry' is the depth of the reef measured from a standard bathymetric surface. 'waterdepthfeet' is the depth of the water where the reef is located, measured in feet. 'latitudedms'/'longitudedms' is the geographical coordinates of the reef in degrees, minutes, and seconds (DMS). 'hover_name' is the same value as reefname."
+}
+
+Ref: s.state_id < c.state_id
+Ref: c.geo_id < sid.geo_id
+Ref: c.geo_id < b.geo_id
+Ref: c.state <> sv.state
+Ref: s.state < sv.state
+Ref: r.stateabbreviation <> s.state
